@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
 
-
+/**
 typedef struct _mod_packet
 {
     double arrivalTime;
@@ -25,7 +25,7 @@ typedef struct _traffic_session
     long int sessionId;
     std::vector<MOD_OBJECT*> objects; 
 }TRAFFIC_SESSION;
-
+*/
 
 typedef struct _packet_info
 {
@@ -47,6 +47,7 @@ typedef struct _packet_info
 
 bool comparePacketInfo(const PACKET_INFO* a, const PACKET_INFO* b);
 
+/*
 /// @brief This function iteract over a pkts list and look for packets of a given user ID and user flow ID.
 /// It fills the fields srcIp and dstPort of the objLists, and uses the flags fin and rst to tell when the 
 /// a object has finished. As result this funcion will produce a list of MOD_OBJECTs for a given user 
@@ -56,3 +57,4 @@ bool comparePacketInfo(const PACKET_INFO* a, const PACKET_INFO* b);
 /// @param userFlowId 
 /// @param objLists 
 void buildObjectList(std::vector<PACKET_INFO*>& pkts, unsigned long userId, unsigned long userFlowId, std::vector<MOD_OBJECT*>& objLists);
+**/
