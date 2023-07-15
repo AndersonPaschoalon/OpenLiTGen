@@ -1,7 +1,13 @@
-
-
 #include "Session.h"
 
+
+void Session::sortObjects()
+{
+    std::sort(this->objects.begin(), this->objects.end(),
+              [](const Object& a, const Object& b) {
+                  return a.getFirstArrivalTime() < b.getFirstArrivalTime();
+              });
+}
 
 void Session::populateSession(const std::vector<PACKET_INFO *> &pkts)
 {
@@ -15,6 +21,7 @@ void Session::populateSession(const std::vector<PACKET_INFO *> &pkts)
     for (const auto& pkt : pkts) 
     {
         objectPkts[pkt->userFlowId].push_back(pkt);
+        // std::vector<PACKET_INFO *> v = objectPkts[pkt->userFlowId];
     }
 
     std::vector<PACKET_INFO*> tempObjectPkts;
@@ -27,7 +34,7 @@ void Session::populateSession(const std::vector<PACKET_INFO *> &pkts)
         {
             tempObjectPkts.push_back(pkt);
 
-            if (pkt->fin || pkt->rst) 
+            if (pkt->fin  == true || pkt->rst == true) 
             {
                 object.populateObject(tempObjectPkts);
                 this->objects.push_back(object);
@@ -46,14 +53,51 @@ void Session::populateSession(const std::vector<PACKET_INFO *> &pkts)
             this->objects.push_back(object);
             tempObjectPkts.clear();            
         }
-    }    
+    }
+
+    this->sortObjects();
 }
 
-std::vector<Object> Session::getObjects() const
+const std::vector<Object> Session::getObjects() const
 {
-    return objects;
+    return this->objects;
 }
 
-void Session::setObjects(const std::vector<Object>& objects) {
-    this->objects = objects;
+const int Session::nObjects() const
+{
+    return this->objects.size();
+}
+
+const std::vector<double> Session::objectsInterArrivalTimes() const
+{
+    std::vector<double> interArrivalTimes;
+    interArrivalTimes.reserve(objects.size() - 1);
+
+    for (size_t i = 1; i < objects.size(); ++i)
+    {
+        double interArrivalTime = objects[i].getFirstArrivalTime() - objects[i - 1].getFirstArrivalTime();
+        interArrivalTimes.push_back(interArrivalTime);
+    }
+
+    return interArrivalTimes;
+}
+
+const double Session::getFirstArrival() const
+{
+    if (!this->objects.empty())
+    {
+        return this->objects[0].getFirstArrivalTime();
+    }
+    return 0.0;
+}
+
+const void Session::echo() const
+{
+    std::cout << "    Session Size: " << nObjects() << " objects" << std::endl;
+
+    for (size_t i = 0; i < objects.size(); ++i) 
+    {
+        std::cout << "     *  [object " << i + 1 << "]" << std::endl;
+        objects[i].echo();
+    }
 }

@@ -39,19 +39,35 @@ void User::populateUsers(const std::vector<PACKET_INFO *> &pkts, double sessionT
     }
 }
 
-std::string User::getUser() const
+const std::string User::getUser() const
 {
-    return user;
+    return this->user;
 }
 
-void User::setUser(const std::string& user) {
-    this->user = user;
+const std::vector<Session> User::getSessions() const {
+    return this->sessions;
 }
 
-std::vector<Session> User::getSessions() const {
-    return sessions;
+const std::vector<double> User::getInterSessionTimes() const
+{
+    std::vector<double> interSessionTimes;
+
+    for (size_t i = 1; i < sessions.size(); ++i)
+    {
+        double interSessionTime = sessions[i].getFirstArrival() - sessions[i - 1].getFirstArrival();
+        interSessionTimes.push_back(interSessionTime);
+    }
+
+    return interSessionTimes;
 }
 
-void User::setSessions(const std::vector<Session>& sessions) {
-    this->sessions = sessions;
+const void User::echo() const
+{
+    std::cout << "  User: " << user << ", Nsessions: " << sessions.size() << std::endl;
+
+    for (size_t i = 0; i < sessions.size(); ++i) 
+    {
+        std::cout << "   *  [session" << i + 1 << "]" << std::endl;
+        sessions[i].echo();
+    }
 }

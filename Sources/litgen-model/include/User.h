@@ -17,10 +17,10 @@ public:
 
     void populateUsers(const std::vector<PACKET_INFO *> &pkts, double sessionThreshold);
 
-    std::string getUser() const;
-    void setUser(const std::string& user);
-    std::vector<Session> getSessions() const;
-    void setSessions(const std::vector<Session>& sessions);
+    const std::string getUser() const;
+    const std::vector<Session> getSessions() const;
+    const std::vector<double> getInterSessionTimes() const;
+    const void echo() const;
 };
 
 #endif // __USER_H__

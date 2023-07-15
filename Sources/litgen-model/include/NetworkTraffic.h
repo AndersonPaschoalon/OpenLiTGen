@@ -7,18 +7,21 @@
 #include "PacketInfo.h"
 
 class NetworkTraffic {
-private:
-    std::vector<User> users;
+    private:
 
-public:
+        std::string trafficName;
+        std::string trafficDescription;
+        std::vector<User> users;
 
-    void populateTraffic(const std::vector<PACKET_INFO*>& pkts, double sessionThreshold);
-    std::vector<User> getUsers() const;
-    void setUsers(const std::vector<User>& users);
+    public:
 
+        NetworkTraffic(std::string name, std::string description);
 
+        void populateTraffic(const std::vector<PACKET_INFO*>& pkts, double sessionThreshold);
 
-
+        const std::vector<User> getUsers() const;
+        const int nUsers() const;
+        const void echo() const;
 };
 
 #endif // __NETWORKTRAFFIC_H__

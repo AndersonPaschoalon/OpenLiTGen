@@ -1,5 +1,11 @@
 #include "NetworkTraffic.h"
 
+NetworkTraffic::NetworkTraffic(std::string name, std::string description)
+{
+    this->trafficName = name;
+    this->trafficDescription = description;
+}
+
 void NetworkTraffic::populateTraffic(const std::vector<PACKET_INFO *> &pkts, double sessionThreshold)
 {
         std::unordered_map<unsigned long, std::vector<PACKET_INFO*>> userPktsMap;
@@ -12,17 +18,28 @@ void NetworkTraffic::populateTraffic(const std::vector<PACKET_INFO *> &pkts, dou
         for (const auto& [userId, userPkt] : userPktsMap) {
             User user;
             user.populateUsers(userPkt, sessionThreshold);
-            users.push_back(user);
+            this->users.push_back(user);
         }
         
 }
 
-std::vector<User> NetworkTraffic::getUsers() const
+const std::vector<User> NetworkTraffic::getUsers() const
 {
     return users;
 }
 
-void NetworkTraffic::setUsers(const std::vector<User>& users) {
-    this->users = users;
+const int NetworkTraffic::nUsers() const
+{
+    return this->users.size();
 }
 
+const void NetworkTraffic::echo() const
+{
+    std::cout << "Network Traffic " << trafficName << ": " << trafficDescription << std::endl;
+
+    for (size_t i = 0; i < this->users.size(); ++i) 
+    {
+        std::cout << "         *  [User " << i + 1 << "]" << std::endl;
+        users[i].echo();
+    }
+}
