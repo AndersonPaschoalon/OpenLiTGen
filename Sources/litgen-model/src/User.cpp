@@ -63,11 +63,11 @@ const std::vector<double> User::getInterSessionTimes() const
 
 const void User::echo() const
 {
-    std::cout << "  User: " << user << ", Nsessions: " << sessions.size() << std::endl;
+    std::cout << ".   .   User: " << user << ", Nsessions: " << sessions.size() << std::endl;
 
     for (size_t i = 0; i < sessions.size(); ++i) 
     {
-        std::cout << "   *  [session" << i + 1 << "]" << std::endl;
+        std::cout << ".   .   .   [session" << i + 1 << "]" << std::endl;
         sessions[i].echo();
     }
 }

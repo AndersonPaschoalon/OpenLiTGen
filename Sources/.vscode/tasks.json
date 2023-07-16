@@ -6,22 +6,13 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
-                "-Wall",
-                "-std=gnu++17",
-                "-Wunused ",
                 "-g",
-                "./src/*.cpp",
-                "-I./include/",
-                "-I../libs/cpptools/include",
+                "${file}",
                 "-o",
-                "./bin/litgen-model.exe",
-                "../libs/cpptools/bin/libcpptools.a",
-                "-ltins",
-                "-lpcap ",
-                "-pthread",
+                "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${fileDirname}"
             },
             "problemMatcher": [
                 "$gcc"

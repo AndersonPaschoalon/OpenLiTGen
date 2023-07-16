@@ -109,9 +109,9 @@ const std::vector<double> Object::getInterArrivalTimes() const
 
 const void Object::echo() const
 {
-    std::cout << "      Server: " << server << std::endl;
+    std::cout << ".   .   .   .   Server: " << server << std::endl;
 
-    std::cout << "      Arrivals: ";
+    std::cout << ".   .   .   .   Arrivals: ";
     const std::vector<double> arrivals = getArrivalTimes();
     for (size_t i = 0; i < arrivals.size(); ++i) {
         std::cout << std::fixed << std::setprecision(8) << arrivals[i];
@@ -121,7 +121,7 @@ const void Object::echo() const
     }
     std::cout << std::endl;
 
-    std::cout << "      PktSizes: ";
+    std::cout << ".   .   .   .   PktSizes: ";
     const std::vector<short> pktSizes = getPktSizes();
     for (size_t i = 0; i < pktSizes.size(); ++i) {
         std::cout << pktSizes[i];

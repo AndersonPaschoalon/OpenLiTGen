@@ -93,11 +93,11 @@ const double Session::getFirstArrival() const
 
 const void Session::echo() const
 {
-    std::cout << "    Session Size: " << nObjects() << " objects" << std::endl;
+    std::cout << ".   .   .   Session Size: " << nObjects() << " objects" << std::endl;
 
     for (size_t i = 0; i < objects.size(); ++i) 
     {
-        std::cout << "     *  [object " << i + 1 << "]" << std::endl;
+        std::cout << ".   .   .   .   [object " << i + 1 << "]" << std::endl;
         objects[i].echo();
     }
 }

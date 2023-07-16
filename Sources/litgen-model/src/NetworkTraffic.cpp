@@ -35,11 +35,11 @@ const int NetworkTraffic::nUsers() const
 
 const void NetworkTraffic::echo() const
 {
-    std::cout << "Network Traffic " << trafficName << ": " << trafficDescription << std::endl;
+    std::cout << ".Network Traffic " << trafficName << ": " << trafficDescription << std::endl;
 
     for (size_t i = 0; i < this->users.size(); ++i) 
     {
-        std::cout << "         *  [User " << i + 1 << "]" << std::endl;
+        std::cout << ".   [User " << i + 1 << "]" << std::endl;
         users[i].echo();
     }
 }
