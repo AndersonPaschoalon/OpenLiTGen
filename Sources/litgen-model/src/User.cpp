@@ -44,30 +44,45 @@ const std::string User::getUser() const
     return this->user;
 }
 
-const std::vector<Session> User::getSessions() const {
+const std::vector<Session> User::getSessions() const 
+{
     return this->sessions;
 }
 
-const std::vector<double> User::getInterSessionTimes() const
+const void User::getInterSessionTimes(std::vector<double>& interSessionTimes) const
 {
-    std::vector<double> interSessionTimes;
-
-    for (size_t i = 1; i < sessions.size(); ++i)
+    interSessionTimes.clear();
+    for (size_t i = 1; i < this->sessions.size(); ++i)
     {
-        double interSessionTime = sessions[i].getFirstArrival() - sessions[i - 1].getFirstArrival();
+        double interSessionTime = this->sessions[i].getFirstArrival() - this->sessions[i - 1].getFirstArrival();
         interSessionTimes.push_back(interSessionTime);
     }
-
-    return interSessionTimes;
 }
 
-const void User::echo() const
+const void User::getNObjectsPerSession(std::vector<int> &nObjectsPerSession) const
 {
-    std::cout << ".   .   User: " << user << ", Nsessions: " << sessions.size() << std::endl;
+    nObjectsPerSession.clear();
+    for (size_t i = 1; i < this->sessions.size(); ++i)
+    {
+        nObjectsPerSession.push_back(this->sessions[i].nObjects());
+    }
+}
+
+const void User::toString(std::string &str) const
+{
+    std::ostringstream oss;
+
+    oss << ".   .   User: " << user << ", Nsessions: " << sessions.size() << std::endl;
 
     for (size_t i = 0; i < sessions.size(); ++i) 
     {
-        std::cout << ".   .   .   [session" << i + 1 << "]" << std::endl;
-        sessions[i].echo();
+        oss << ".   .   .   [session" << i + 1 << "]" << std::endl;
+
+        std::string* temp = new std::string();
+        sessions[i].toString(*temp);
+        oss << *temp;
+        delete temp;
     }
+
+    str = oss.str();
 }

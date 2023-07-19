@@ -68,18 +68,36 @@ const int Session::nObjects() const
     return this->objects.size();
 }
 
-const std::vector<double> Session::objectsInterArrivalTimes() const
+const void Session::objectsInterArrivalTimes(std::vector<double>& interArrivalTimes) const
 {
-    std::vector<double> interArrivalTimes;
-    interArrivalTimes.reserve(objects.size() - 1);
+    interArrivalTimes.clear();
+    interArrivalTimes.reserve(this->objects.size() - 1);
 
-    for (size_t i = 1; i < objects.size(); ++i)
+    for (size_t i = 1; i < this->objects.size(); ++i)
     {
-        double interArrivalTime = objects[i].getFirstArrivalTime() - objects[i - 1].getFirstArrivalTime();
+        double interArrivalTime = this->objects[i].getFirstArrivalTime() - this->objects[i - 1].getFirstArrivalTime();
         interArrivalTimes.push_back(interArrivalTime);
     }
+}
 
-    return interArrivalTimes;
+const void Session::objectsNPackets(std::vector<int>& nPackets) const
+{
+    nPackets.clear();
+    nPackets.reserve(this->objects.size());
+    for (size_t i = 1; i < this->objects.size(); ++i)
+    {
+        nPackets.push_back(this->objects[i].getNPackets());
+    }
+}
+
+const void Session::serverList(std::vector<std::string>& serverList) const
+{
+    serverList.clear();
+    serverList.reserve(this->objects.size());
+    for (size_t i = 1; i < this->objects.size(); ++i)
+    {
+        serverList.push_back(this->objects[i].getServer());
+    }
 }
 
 const double Session::getFirstArrival() const
@@ -91,13 +109,19 @@ const double Session::getFirstArrival() const
     return 0.0;
 }
 
-const void Session::echo() const
+const void Session::toString(std::string& str) const
 {
-    std::cout << ".   .   .   Session Size: " << nObjects() << " objects" << std::endl;
+    std::ostringstream oss;
+    oss << ".   .   .   Session Size: " << nObjects() << " objects" << std::endl;
 
     for (size_t i = 0; i < objects.size(); ++i) 
     {
-        std::cout << ".   .   .   .   [object " << i + 1 << "]" << std::endl;
-        objects[i].echo();
+        std::string* temp = new std::string();
+        oss << ".   .   .   .   [object " << i + 1 << "]" << std::endl;
+        objects[i].toString(*temp);
+        oss << *temp;
+        delete temp;
     }
+
+    str = oss.str();
 }

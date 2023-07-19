@@ -19,12 +19,14 @@ class Session
 
     public:
         void populateSession(const std::vector<PACKET_INFO *> &pkts);
+
         const std::vector<Object> getObjects() const;
         const int nObjects() const;
-        const std::vector<double> objectsInterArrivalTimes() const;
+        const void objectsInterArrivalTimes(std::vector<double>& interArrivalsTimes) const;
+        const void objectsNPackets(std::vector<int>& objNPackets) const;
+        const void serverList(std::vector<std::string>& servers) const;
         const double getFirstArrival() const;
-        const void echo() const;
-
+        const void toString(std::string& str) const;
 };
 
 #endif // __SESSION_H__

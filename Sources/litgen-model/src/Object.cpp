@@ -2,7 +2,6 @@
 #include "Object.h"
 
 
-
 void Object::populateObject(const std::vector<PACKET_INFO *> &pkts)
 {
     if (pkts.empty()) 
@@ -12,7 +11,8 @@ void Object::populateObject(const std::vector<PACKET_INFO *> &pkts)
 
     server = pkts[0]->ipSrc + ":" + std::to_string(pkts[0]->portDst);
 
-    for (const auto& pkt : pkts) {
+    for (const auto& pkt : pkts) 
+    {
         Packet packet;
         packet.setArrivalTime(pkt->arrivalTime);
         packet.setPacketSize(pkt->pktSize);
@@ -25,7 +25,8 @@ const std::string Object::getServer() const
     return this->server;
 }
 
-void Object::setServer(const std::string& server) {
+void Object::setServer(const std::string& server) 
+{
     this->server = server;
 }
 
@@ -52,15 +53,17 @@ const double Object::getLastArrivalTime() const
     return 0.0;
 }
 
-const int Object::getNPackets()
+const int Object::getNPackets() const
 {
     return this->packets.size();
 }
 
-const int Object::dataSize()
+const int Object::dataSize() const
 {
-    std::vector<short> pktSizes = this->getPktSizes();
     int total = 0;
+    std::vector<short> pktSizes;
+
+    this->getPktSizes(pktSizes);
     for (short size: pktSizes)
     {
         total += size;
@@ -68,34 +71,34 @@ const int Object::dataSize()
     return total;
 }
 
-const std::vector<double> Object::getArrivalTimes() const
+const void Object::getArrivalTimes(std::vector<double>& arrivals) const
 {
-    std::vector<double> arrivals;
+    arrivals.clear();
     arrivals.reserve(packets.size());
 
     for (const auto& pkt: this->packets)
     {
         arrivals.push_back(pkt.getArrivalTime());
     }
-    return arrivals;
 }
 
-const std::vector<short> Object::getPktSizes() const
+const void Object::getPktSizes(std::vector<short>& pktSizes) const
 {
-    std::vector<short> pktSizes;
+    pktSizes.clear();
     pktSizes.reserve(packets.size());
 
     for (const auto& pkt: this->packets)
     {
         pktSizes.push_back(pkt.getPacketSize());
     }
-    return pktSizes;
 }
 
-const std::vector<double> Object::getInterArrivalTimes() const
+const void Object::getInterArrivalTimes(std::vector<double>& interArrivalTimes) const
 {
-    const std::vector<double> arrivalTimes = getArrivalTimes();
-    std::vector<double> interArrivalTimes;
+    std::vector<double> arrivalTimes;
+    this->getArrivalTimes(arrivalTimes);
+
+    interArrivalTimes.clear();
     interArrivalTimes.reserve(arrivalTimes.size() - 1);
 
     for (size_t i = 1; i < arrivalTimes.size(); ++i)
@@ -103,31 +106,38 @@ const std::vector<double> Object::getInterArrivalTimes() const
         double interArrivalTime = arrivalTimes[i] - arrivalTimes[i - 1];
         interArrivalTimes.push_back(interArrivalTime);
     }
-
-    return interArrivalTimes;
 }
 
-const void Object::echo() const
+const void Object::toString(std::string& str) const
 {
-    std::cout << ".   .   .   .   Server: " << server << std::endl;
+    std::ostringstream oss;
 
-    std::cout << ".   .   .   .   Arrivals: ";
-    const std::vector<double> arrivals = getArrivalTimes();
-    for (size_t i = 0; i < arrivals.size(); ++i) {
-        std::cout << std::fixed << std::setprecision(8) << arrivals[i];
-        if (i != arrivals.size() - 1) {
-            std::cout << ", ";
+    oss << ".   .   .   .   Server: " << server << std::endl;
+    oss << ".   .   .   .   Arrivals: ";
+    std::vector<double> arrivals;
+    this->getArrivalTimes(arrivals);
+    for (size_t i = 0; i < arrivals.size(); ++i) 
+    {
+        oss << std::fixed << std::setprecision(8) << arrivals[i];
+        if (i != arrivals.size() - 1) 
+        {
+            oss << ", ";
         }
     }
-    std::cout << std::endl;
+    oss << std::endl;
 
-    std::cout << ".   .   .   .   PktSizes: ";
-    const std::vector<short> pktSizes = getPktSizes();
-    for (size_t i = 0; i < pktSizes.size(); ++i) {
-        std::cout << pktSizes[i];
-        if (i != pktSizes.size() - 1) {
-            std::cout << ", ";
+    oss << ".   .   .   .   PktSizes: ";
+    std::vector<short> pktSizes;
+    this->getPktSizes(pktSizes);
+    for (size_t i = 0; i < pktSizes.size(); ++i) 
+    {
+        oss << pktSizes[i];
+        if (i != pktSizes.size() - 1) 
+        {
+            oss << ", ";
         }
     }
-    std::cout << std::endl;
+    oss << std::endl;
+
+    str = oss.str();
 }

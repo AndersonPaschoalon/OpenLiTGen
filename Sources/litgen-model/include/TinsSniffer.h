@@ -14,10 +14,9 @@
 class TinsSniffer 
 {
     public:
+    
         static bool analyze(const std::string& pcapFile, std::vector<PACKET_INFO*>& pkts); 
-
         static bool free(std::vector<PACKET_INFO*> pkts);
-
         static bool echo(const std::vector<PACKET_INFO*>& pkts);
 
     private:

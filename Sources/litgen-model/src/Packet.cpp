@@ -2,18 +2,23 @@
 
 #include "Packet.h"
 
-double Packet::getArrivalTime() const {
+double Packet::getArrivalTime() const 
+{
     return arrivalTime;
 }
 
-void Packet::setArrivalTime(double arrivalTime) {
+void Packet::setArrivalTime(double arrivalTime) 
+{
     this->arrivalTime = arrivalTime;
 }
 
-short Packet::getPacketSize() const {
+short Packet::getPacketSize() const 
+{
     return packetSize;
 }
 
-void Packet::setPacketSize(short packetSize) {
+void Packet::setPacketSize(short packetSize) 
+{
     this->packetSize = packetSize;
 }
+

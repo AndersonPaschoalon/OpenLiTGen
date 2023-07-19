@@ -33,13 +33,113 @@ const int NetworkTraffic::nUsers() const
     return this->users.size();
 }
 
-const void NetworkTraffic::echo() const
+const void NetworkTraffic::toString(std::string& str) const
 {
-    std::cout << ".Network Traffic " << trafficName << ": " << trafficDescription << std::endl;
+    std::ostringstream oss;
+    oss << ".Network Traffic " << trafficName << ": " << trafficDescription << std::endl;
 
     for (size_t i = 0; i < this->users.size(); ++i) 
     {
-        std::cout << ".   [User " << i + 1 << "]" << std::endl;
-        users[i].echo();
+        oss << ".   [User " << i + 1 << "]" << std::endl;
+
+        // use heap
+        std::string* temp = new std::string();
+        users[i].toString(*temp);
+        oss << *temp;
+        delete temp;
+    }
+
+    str = oss.str();
+}
+
+const std::string NetworkTraffic::getName() const
+{
+    return this->trafficName;
+}
+
+const std::string NetworkTraffic::getDescription() const
+{
+    return this->trafficDescription;
+}
+
+const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> &userList) const
+{
+    nUsers = this->nUsers();
+    userList.clear();
+    for (auto& user: this->users)
+    {
+        userList.push_back(user.getUser());
     }
 }
+
+const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTimes, std::vector<int> &nObjectsPerSection) const
+{
+    interSessionTimes.clear();
+    nObjectsPerSection.clear();
+    for (auto& user: this->users)
+    {
+        std::vector<double> userInterSessions;
+        std::vector<int> userNObjects;
+
+        user.getInterSessionTimes(userInterSessions);
+        interSessionTimes.insert(interSessionTimes.end(), userInterSessions.begin(), userInterSessions.end());
+
+        user.getNObjectsPerSession(userNObjects);
+        nObjectsPerSection.insert(nObjectsPerSection.end(), userNObjects.begin(), userNObjects.end());
+    }
+}
+
+const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes, std::vector<int> &npacketsPerObject, std::vector<std::string> &serverList) const
+{
+    interObjectTimes.clear();
+    npacketsPerObject.clear();
+    serverList.clear();
+    for (auto& user: this->users)
+    {
+        std::vector<Session> ss = user.getSessions();
+        for(auto& session: ss)
+        {
+            std::vector<double> oit;
+            session.objectsInterArrivalTimes(oit);
+            interObjectTimes.insert(interObjectTimes.end(), oit.begin(), oit.end());
+
+            std::vector<int> npo;
+            session.objectsNPackets(npo);
+            npacketsPerObject.insert(npacketsPerObject.end(), npo.begin(), npo.end());
+
+            std::vector<std::string> sl;
+            session.serverList(sl);
+            serverList.insert(serverList.end(), sl.begin(), sl.end());
+        }
+    }
+}
+
+const void NetworkTraffic::queryPacketData(std::vector<double> &interPacketTimes, std::vector<short> packetSizes)
+{
+    interPacketTimes.clear();
+    packetSizes.clear();
+    for (auto& user: this->users)
+    {
+        std::vector<Session> ss = user.getSessions();
+        for(auto& session: ss)
+        {
+            std::vector<Object> objs = session.getObjects();
+            for(auto& object: objs)
+            {
+                std::vector<double> pit;
+                object.getInterArrivalTimes(pit);
+                interPacketTimes.insert(interPacketTimes.end(), pit.begin(), pit.end());
+
+                std::vector<short> pks;
+                object.getPktSizes(pks);
+                packetSizes.insert(packetSizes.end(), pks.begin(), pks.end());                
+            }
+        }
+    }
+}
+
+
+
+
+
+

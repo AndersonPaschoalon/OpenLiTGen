@@ -5,16 +5,17 @@
 #include "PacketInfo.h"
 
 
-class Packet {
-private:
-    double arrivalTime;
-    short packetSize;
+class Packet 
+{
+    private:
+        double arrivalTime;
+        short packetSize;
 
-public:
-    double getArrivalTime() const;
-    void setArrivalTime(double arrivalTime);
-    short getPacketSize() const;
-    void setPacketSize(short packetSize);
+    public:
+        double getArrivalTime() const;
+        void setArrivalTime(double arrivalTime);
+        short getPacketSize() const;
+        void setPacketSize(short packetSize);
 };
 
 #endif // __PACKET_H__
