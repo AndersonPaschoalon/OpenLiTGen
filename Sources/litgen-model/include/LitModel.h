@@ -11,8 +11,8 @@ class LitModel
 {
     private:
         long int nUsers;
-        std::vector<std::string> userList;
-        std::vector<std::string> serverList;
+        std::vector<std::string>* userList;
+        std::vector<std::string>* serverList;
         std::string trafficName;
         std::string comment;
         long int lambda_Nsession;
@@ -21,10 +21,11 @@ class LitModel
         long int lambda_IAobj;
         long int lambda_IApkt;
 
-        double exponentialLambda(const std::vector<double>& interArrivals);
-        double exponentialLambda(const std::vector<short>& interArrivals);
 
     public:
+        LitModel();
+        ~LitModel();
+
         void calc(NetworkTraffic& net);
         bool save();
 };

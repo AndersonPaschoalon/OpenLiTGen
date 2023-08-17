@@ -10,12 +10,15 @@ void NetworkTraffic::populateTraffic(const std::vector<PACKET_INFO *> &pkts, dou
 {
         std::unordered_map<unsigned long, std::vector<PACKET_INFO*>> userPktsMap;
         
+        // map each packet for each unique user
         for (const auto& pkt : pkts) 
         {
             userPktsMap[pkt->userId].push_back(pkt);
         }
         
-        for (const auto& [userId, userPkt] : userPktsMap) {
+        // for each unique user create a new user entry and populate it with his packets
+        for (const auto& [userId, userPkt] : userPktsMap) 
+        {
             User user;
             user.populateUsers(userPkt, sessionThreshold);
             this->users.push_back(user);
@@ -62,7 +65,7 @@ const std::string NetworkTraffic::getDescription() const
     return this->trafficDescription;
 }
 
-const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> &userList) const
+const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> &userList, bool removeDuplicatesFromUserList) const
 {
     nUsers = this->nUsers();
     userList.clear();
@@ -70,6 +73,7 @@ const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> 
     {
         userList.push_back(user.getUser());
     }
+    userList = removeDuplicates(userList);
 }
 
 const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTimes, std::vector<int> &nObjectsPerSection) const
@@ -89,7 +93,7 @@ const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTi
     }
 }
 
-const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes, std::vector<int> &npacketsPerObject, std::vector<std::string> &serverList) const
+const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes, std::vector<int> &npacketsPerObject, std::vector<std::string> &serverList, bool removeDuplicatesFromServerList) const
 {
     interObjectTimes.clear();
     npacketsPerObject.clear();
@@ -112,6 +116,8 @@ const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes
             serverList.insert(serverList.end(), sl.begin(), sl.end());
         }
     }
+
+    serverList = removeDuplicates(serverList);
 }
 
 const void NetworkTraffic::queryPacketData(std::vector<double> &interPacketTimes, std::vector<short> packetSizes)

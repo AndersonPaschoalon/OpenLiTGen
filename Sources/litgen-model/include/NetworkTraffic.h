@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "User.h"
 #include "PacketInfo.h"
+#include "Utils.h"
 
 class NetworkTraffic 
 {
@@ -25,9 +26,9 @@ class NetworkTraffic
         const void toString(std::string& str) const;
         const std::string getName() const;
         const std::string getDescription() const;
-        const void queryUsersData(int& nUsers, std::vector<std::string>& userList) const;
+        const void queryUsersData(int& nUsers, std::vector<std::string>& userList, bool removeDuplicatesFromUserList) const;
         const void querySessionsData(std::vector<double>& interSessionTimes, std::vector<int>& nObjectsPersection) const;
-        const void queryObjectData(std::vector<double>& interObjectTimes, std::vector<int>& npacketsPerObject, std::vector<std::string>& serverList) const;
+        const void queryObjectData(std::vector<double>& interObjectTimes, std::vector<int>& npacketsPerObject, std::vector<std::string>& serverList, bool removeDuplicatesFromServerList) const;
         const void queryPacketData(std::vector<double>& interPacketTimes, std::vector<short> packetSizes);
 
 };
