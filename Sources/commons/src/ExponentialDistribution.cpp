@@ -20,7 +20,7 @@ void ExponentialDistribution::fit(const std::vector<double> &samples)
         sum += sample;
     }
 
-    this->lambda = static_cast<double>(samples.size()) / sum;    
+    this->lambda = static_cast<double>(samples.size()) / sum;
 }
 
 double ExponentialDistribution::getLambda() const

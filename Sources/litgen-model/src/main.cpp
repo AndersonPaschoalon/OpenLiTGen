@@ -34,35 +34,6 @@ const char appVersion[] = R"(
 
 
 void createLitModel(const char* pcapFileName, const char* pcapComment, double sessionThreshold);
-void printVer1sion();
-void printHelpMenu();
-
-/*
-int main() 
-{
-    const char* pcapFileName = "../../../Pcaps/lanDiurnal.pcap";
-    const char* pcapComment = "Pcap for tests.";
-
-
-    std::string traceName = getFileName(pcapFileName, true);
-    double sessionThreshold = 300.00;
-
-    if(fileExists(pcapFileName))
-    {
-        createLitModel(pcapFileName, pcapComment, sessionThreshold);
-    }
-    else
-    {
-        printf("Error: file %s could not be found. Please provide as input a valid pcap file path, and try again.", pcapFileName);
-        return -1;
-    }
-
-
-
-    return 0;
-}
-*/
-
 
 
 int main(int argc, char* argv[]) 
@@ -138,7 +109,7 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     // capture all packets raw data
     std::vector<PACKET_INFO *> pkts;
     TinsSniffer::analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
-    TinsSniffer::echo(pkts);
+    // TinsSniffer::echo(pkts);
 
     // classify the data for modelling
     std::string traceName = getFileName(pcapFileName, true);

@@ -15,11 +15,11 @@ class LitModel
         std::vector<std::string>* serverList;
         std::string trafficName;
         std::string comment;
-        long int lambda_Nsession;
-        long int lambda_Tis;
-        long int lambda_Nobj;
-        long int lambda_IAobj;
-        long int lambda_IApkt;
+        double lambda_Nsession;
+        double lambda_Tis;
+        double lambda_Nobj;
+        double lambda_IAobj;
+        double lambda_IApkt;
 
 
     public:

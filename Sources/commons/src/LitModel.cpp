@@ -50,6 +50,7 @@ void LitModel::calc(NetworkTraffic &net)
     net.queryObjectData(*interObjectTimes, *npacketsPerObject, *serverList, true);
     net.queryPacketData(*interPacketTimes, *packetSizes);
 
+
     std::vector<double> doublenObjectsPersection;
     std::vector<double> doublenpacketsPerObject;
     doublenObjectsPersection.reserve(nObjectsPersection->size()); 
@@ -124,6 +125,13 @@ bool LitModel::save()
     if (!file.is_open()) {
         return false;  // Failed to open file
     }
+
+    printf("\nthis->lambda_Tis:%f\n", this->lambda_Tis);
+    printf("\nthis->lambda_Nobj:%f\n", this->lambda_Nobj);
+    printf("\nthis->lambda_Nsession:%f\n", this->lambda_Nsession);
+    printf("\nthis->lambda_IAobj:%f\n", this->lambda_IAobj);
+    printf("\nthis->lambda_IApkt:%f\n", this->lambda_IApkt);
+
 
     // Write the private variables as key-value pairs
     file << "nUsers=" << this->nUsers << '\n';
