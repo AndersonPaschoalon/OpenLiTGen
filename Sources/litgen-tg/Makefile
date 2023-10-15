@@ -1,8 +1,8 @@
 CC = g++
 CFLAGS = -c -Wall -std=gnu++17  -Wunused  -fdiagnostics-color=always  # -Wdeprecated-declarations
 LDFLAGS = -ltins -lpcap -pthread
-EXTERNAL_INCLUDES = -I../libs/cpptools/include
-EXTERNAL_LDFLAGS = ../libs/cpptools/bin/libcpptools.a
+EXTERNAL_INCLUDES = -I../libs/cpptools_0.1.0.0/include
+EXTERNAL_LDFLAGS = ../libs/cpptools_0.1.0.0/bin/libcpptools.a
 
 SRCDIR = src
 INCDIR = include

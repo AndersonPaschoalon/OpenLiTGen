@@ -8,21 +8,23 @@
 #include <unordered_map>
 #include <tins/tins.h>
 #include "PacketInfo.h"
+#include "BaseSniffer.h"
 
 
-
-class TinsSniffer 
+class TinsSniffer: public BaseSniffer
 {
     public:
+
+        TinsSniffer();
     
-        static bool analyze(const std::string& pcapFile, std::vector<PACKET_INFO*>& pkts); 
-        static bool free(std::vector<PACKET_INFO*> pkts);
-        static bool echo(const std::vector<PACKET_INFO*>& pkts);
+        bool analyze(const std::string& pcapFile, std::vector<PACKET_INFO*>& pkts) const; 
+        //bool free(std::vector<PACKET_INFO*> pkts);
+        //bool echo(const std::vector<PACKET_INFO*>& pkts);
 
     private:
 
         static double delta(Tins::Timestamp current, Tins::Timestamp last);
-        static void userAndFlowIdAssingment(std::vector<PACKET_INFO*> pkts);
+        //static void userAndFlowIdAssingment(std::vector<PACKET_INFO*> pkts);
 };
 
 #endif // __TINS_SNIFFER__H__

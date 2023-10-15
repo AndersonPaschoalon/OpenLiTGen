@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <getopt.h>
+#include "BaseSniffer.h"
 #include "TinsSniffer.h"
+#include "CsvSniffer.h"
 #include "NetworkTraffic.h"
 #include "LitModel.h"
 
@@ -108,8 +110,13 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
 {
     // capture all packets raw data
     std::vector<PACKET_INFO *> pkts;
-    TinsSniffer::analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
+    BaseSniffer* sniffer;
+    sniffer = new CsvSniffer();
+
+    // TinsSniffer::analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
+    sniffer->analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
     // TinsSniffer::echo(pkts);
+    BaseSniffer::echo(pkts);
 
     // classify the data for modelling
     std::string traceName = getFileName(pcapFileName, true);
@@ -126,8 +133,10 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     lit.save();
 
     // free allocated memory
-    TinsSniffer::free(pkts);
+    // TinsSniffer::free(pkts);
+    BaseSniffer::free(pkts);
     delete netTraffic;
     delete str;
+    delete sniffer;
 
 }
