@@ -22,7 +22,7 @@ all: $(EXECUTABLE)
 
 # build the executable
 $(EXECUTABLE): prebuild $(OBJECTS) $(COMMONS_OBJECTS)
-	$(CC) $(OBJECTS)  $(COMMONS_OBJECTS) -o  $@ $(LDFLAGS) $(EXTERNAL_LDFLAGS)
+	$(CC) $(OBJECTS)  $(COMMONS_OBJECTS) $(EXTERNAL_LDFLAGS) -o  $@ $(LDFLAGS) 
 
 # build the objects
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

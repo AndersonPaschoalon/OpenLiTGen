@@ -1,6 +1,6 @@
 
 #ifndef __PACKET_H__
-#define __PACKET_H__
+#define __PACKET_H__ 1
 
 #include "PacketInfo.h"
 

@@ -111,15 +111,26 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     // capture all packets raw data
     std::vector<PACKET_INFO *> pkts;
     BaseSniffer* sniffer;
-    sniffer = new CsvSniffer();
 
-    // TinsSniffer::analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
-    sniffer->analyze(pcapFileName, pkts); // "../../Pcap/SkypeIRC.cap"
-    // TinsSniffer::echo(pkts);
-    BaseSniffer::echo(pkts);
+    // Sniffer Factory
+    // TODO usar to lower
+    bool isCsv = StringUtils::endsWith(pcapFileName, ".csv");
+    if (isCsv)
+    {
+        sniffer = new CsvSniffer();
+    }
+    else // pcap as default
+    {
+        sniffer = new TinsSniffer();
+    }
+
+    sniffer->analyze(pcapFileName, pkts); 
+    sniffer->echo(pkts);
 
     // classify the data for modelling
+    // TODO usar lib cpptools
     std::string traceName = getFileName(pcapFileName, true);
+    // string is too big, better to not use the heap!
     std::string* str = new std::string();
     str->clear();
     NetworkTraffic* netTraffic = new NetworkTraffic(traceName, pcapComment);
@@ -133,8 +144,7 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     lit.save();
 
     // free allocated memory
-    // TinsSniffer::free(pkts);
-    BaseSniffer::free(pkts);
+    sniffer->free(pkts);
     delete netTraffic;
     delete str;
     delete sniffer;

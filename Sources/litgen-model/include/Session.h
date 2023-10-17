@@ -1,6 +1,6 @@
 
-#ifndef __SESSION_H__
-#define __SESSION_H__
+#ifndef __SESSION_H__ 
+#define __SESSION_H__ 1
 
 #include <algorithm>
 #include <array>

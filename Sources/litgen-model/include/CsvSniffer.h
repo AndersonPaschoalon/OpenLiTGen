@@ -1,5 +1,5 @@
 #ifndef CSVSNIFFER_H
-#define CSVSNIFFER_H
+#define CSVSNIFFER_H 1
 
 #include <fstream>      // For file input/output
 #include <sstream>      // For string stream operations

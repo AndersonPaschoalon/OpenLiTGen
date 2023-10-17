@@ -1,5 +1,5 @@
 #ifndef __NETWORKTRAFFIC_H__
-#define __NETWORKTRAFFIC_H__
+#define __NETWORKTRAFFIC_H__ 1
 
 #include <vector>
 #include <sstream>

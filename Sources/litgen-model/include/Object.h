@@ -1,6 +1,6 @@
 
 #ifndef __OBJECT_H__
-#define __OBJECT_H__
+#define __OBJECT_H__ 1
 
 
 #include <iomanip>  

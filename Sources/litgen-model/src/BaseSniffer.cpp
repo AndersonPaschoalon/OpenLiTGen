@@ -6,6 +6,11 @@ BaseSniffer::~BaseSniffer()
 
 bool BaseSniffer::free(std::vector<PACKET_INFO *> &pkts)
 {
+    return BaseSniffer::baseFree(pkts);
+}
+
+bool BaseSniffer::baseFree(std::vector<PACKET_INFO *> &pkts)
+{
     for (int i = 0; i < pkts.size(); i++)
     {
         delete pkts[i];
@@ -17,6 +22,11 @@ bool BaseSniffer::free(std::vector<PACKET_INFO *> &pkts)
 }
 
 bool BaseSniffer::echo(const std::vector<PACKET_INFO *> &pkts)
+{
+    return BaseSniffer::baseEcho(pkts);
+}
+
+bool BaseSniffer::baseEcho(const std::vector<PACKET_INFO *> &pkts)
 {
     for (const auto& pkt : pkts) {
         std::cout << "Time: " << pkt->arrivalTime << ", ";

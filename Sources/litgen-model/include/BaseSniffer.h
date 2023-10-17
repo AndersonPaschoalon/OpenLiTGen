@@ -1,5 +1,5 @@
 #ifndef BASESNIFFER_H
-#define BASESNIFFER_H
+#define BASESNIFFER_H 1
 
 #include <iostream>
 #include <algorithm>
@@ -24,12 +24,23 @@ public:
     /// @brief 
     /// @param pkts 
     /// @return 
-    static bool free(std::vector<PACKET_INFO *> &pkts);
+    virtual bool free(std::vector<PACKET_INFO *> &pkts);
 
     /// @brief 
     /// @param pkts 
     /// @return 
-    static bool echo(const std::vector<PACKET_INFO *> &pkts);
+    virtual bool echo(const std::vector<PACKET_INFO *> &pkts);
+
+
+    /// @brief 
+    /// @param pkts 
+    /// @return 
+    static bool baseFree(std::vector<PACKET_INFO *> &pkts);
+
+    /// @brief 
+    /// @param pkts 
+    /// @return 
+    static bool baseEcho(const std::vector<PACKET_INFO *> &pkts);
 
 protected:
     static void userAndFlowIdAssignment(std::vector<PACKET_INFO *> &pkts);
