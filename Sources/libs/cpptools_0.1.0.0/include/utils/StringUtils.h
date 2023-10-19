@@ -19,7 +19,17 @@ class StringUtils
         // string manipulation
         //
 
-        static std::string toLower(const char* str);
+
+        // deprecated
+        //static std::string toLower(const char* str);
+
+        static void toLower(std::string& str);
+
+        static void toUpper(std::string& str);
+
+        static std::string toLowerCopy(const char* str);
+
+        static std::string toUpperCopy(const char* str);
 
         static void lTrim(std::string &s);
 
@@ -27,34 +37,34 @@ class StringUtils
 
         static void trim(std::string &s);
 
-        static std::string ltrimCopy(std::string s);
+        static std::string ltrimCopy(const char* s);
 
-        static std::string rtrimCopy(std::string s);
+        static std::string rtrimCopy(const char* s);
 
-        static std::string trimCopy(std::string s);
+        static std::string trimCopy(const char* s);
 
         //
         // type to string operations
         //
 
-        const static std::string toHexString(unsigned long n);
+        static std::string toHexString(unsigned long n);
 
-        const static std::string toHexString(unsigned int n);
+        static std::string toHexString(unsigned int n);
         
-        const static std::string toHexString(unsigned short n);
+        static std::string toHexString(unsigned short n);
 
-        const static std::string toString(std::vector<std::string> vec);
+        static std::string toString(std::vector<std::string> vec);
         
-        const static std::string toString(std::list<std::string> vec);
+         static std::string toString(std::list<std::string> vec);
 
-        const static bool toBool(const char* str);
+        static bool toBool(const char* str);
 
         //
         // check and tests
         //
 
-        const static bool startsWith(const std::string &fullString, const std::string &startString); 
-        const static bool endsWith(const char *fullString, const char *endString);
+        static bool startsWith(const char*  fullString, const char*  startString); 
+        static bool endsWith(const char *fullString, const char *endString);
 
     private:
 

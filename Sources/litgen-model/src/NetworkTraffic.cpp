@@ -73,7 +73,7 @@ const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> 
     {
         userList.push_back(user.getUser());
     }
-    userList = removeDuplicates(userList);
+    userList = VectorUtils::removeDuplicates(userList);
 }
 
 const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTimes, std::vector<int> &nObjectsPerSection) const
@@ -117,7 +117,7 @@ const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes
         }
     }
 
-    serverList = removeDuplicates(serverList);
+    serverList =  VectorUtils::removeDuplicates(serverList);
 }
 
 const void NetworkTraffic::queryPacketData(std::vector<double> &interPacketTimes, std::vector<short> packetSizes)

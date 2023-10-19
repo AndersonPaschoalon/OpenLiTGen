@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 
     if(flagPcapFileName == true && flagPcapComment == true)
     {
-        if(fileExists(pcapFileName.c_str()))
+        if(OSUtils::fileExists(pcapFileName.c_str()))
         {
             createLitModel(pcapFileName.c_str(), pcapComment.c_str(), sessionThreshold);
         }
@@ -113,8 +113,7 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     BaseSniffer* sniffer;
 
     // Sniffer Factory
-    // TODO usar to lower
-    bool isCsv = StringUtils::endsWith(pcapFileName, ".csv");
+    bool isCsv = StringUtils::endsWith(StringUtils::toLowerCopy(pcapFileName).c_str(), ".csv");
     if (isCsv)
     {
         sniffer = new CsvSniffer();
@@ -128,8 +127,7 @@ void createLitModel(const char* pcapFileName, const char* pcapComment, double se
     sniffer->echo(pkts);
 
     // classify the data for modelling
-    // TODO usar lib cpptools
-    std::string traceName = getFileName(pcapFileName, true);
+    std::string traceName = OSUtils::getFileName(pcapFileName, true);
     // string is too big, better to not use the heap!
     std::string* str = new std::string();
     str->clear();

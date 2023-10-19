@@ -4,9 +4,11 @@
 #include <vector>
 #include <sstream>
 #include <unordered_map>
+#include <cpptools.h>
 #include "User.h"
 #include "PacketInfo.h"
 #include "Utils.h"
+
 
 class NetworkTraffic 
 {

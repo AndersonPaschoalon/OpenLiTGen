@@ -1,27 +1,56 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++ arquivo de build ativo",
-            "command": "/usr/bin/g++",
+            "label": "build_debug_litgen_model",
+            "type": "shell",
+            "command": "g++",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "-std=gnu++17",
+                "-Wall",
+                "-Wextra",
+                "-Wunused",
+                "-pedantic",
+                "-fPIC",
+                "${workspaceFolder}/commons/src/*.cpp",
+                "${workspaceFolder}/litgen-model/src/*.cpp",
+                "${workspaceFolder}/libs/cpptools_0.1.0.0/bin/libcpptools.a",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${workspaceFolder}/bin/litgen-model.exe",
+                "-I${workspaceFolder}/libs/cpptools_0.1.0.0/include/",
+                "-I${workspaceFolder}/commons/include/",
+                "-I${workspaceFolder}/litgen-model/include/",
+                "-ltins",
+                "-lpcap",
+                "-pthread",
             ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
+            "group": "build"
+        },
+        {
+            "label": "build_debug_litgen_tg",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-std=gnu++17",
+                "-Wall",
+                "-Wextra",
+                "-Wunused",
+                "-pedantic",
+                "-fPIC",
+                "${workspaceFolder}/commons/src/*.cpp",
+                "${workspaceFolder}/litgen-model/src/*.cpp",
+                "${workspaceFolder}/libs/cpptools_0.1.0.0/bin/libcpptools.a",
+                "-o",
+                "${workspaceFolder}/bin/litgen-model.exe",
+                "-I${workspaceFolder}/libs/cpptools_0.1.0.0/include/",
+                "-I${workspaceFolder}/commons/include/",
+                "-I${workspaceFolder}/litgen-model/include/",
+                "-ltins",
+                "-lpcap",
+                "-pthread",
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Tarefa gerada pelo Depurador."
+            "group": "build"
         }
     ],
     "version": "2.0.0"

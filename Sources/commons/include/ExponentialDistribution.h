@@ -1,5 +1,5 @@
 #ifndef EXPONENTIAL_DISTRIBUTION_H
-#define EXPONENTIAL_DISTRIBUTION_H
+#define EXPONENTIAL_DISTRIBUTION_H 1
 
 #include "StochasticDistribution.h"
 

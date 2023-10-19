@@ -1,6 +1,7 @@
 #ifndef __UTILS__H__
 #define __UTILS__H__ 1
 
+/*
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -48,7 +49,7 @@ std::string getFileName(const char* fullPath, bool removeExtension);
 /// @return True if the file exists, false otherwise.
 bool fileExists(const char* fileName);
 
-
+**/
 
 #endif // __UTILS__H__
 
