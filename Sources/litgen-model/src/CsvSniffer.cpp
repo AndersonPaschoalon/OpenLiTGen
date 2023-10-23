@@ -25,7 +25,6 @@ bool CsvSniffer::analyze(const std::string &csvFile, std::vector<PACKET_INFO *> 
     {
         line.clear();
         boolRet = parser->getNextLine(line);
-        printf("line ->%s\n", StringUtils::toString(line).c_str());
         if(boolRet == false)
         {
             break;

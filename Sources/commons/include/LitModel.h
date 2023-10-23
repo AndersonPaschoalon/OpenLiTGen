@@ -9,7 +9,27 @@
 
 class LitModel 
 {
+    public:
+
+        enum class LoadResult
+        {
+            OK,
+            FILE_NOT_FOUND,
+            WRONG_FORMAT,
+            UNKNOWN_ERROR
+        };
+
+        LitModel();
+        ~LitModel();
+
+        void calc(NetworkTraffic& net);
+        bool save();
+        LoadResult load(const char* fileName);
+
     private:
+
+        void clear();
+    
         long int nUsers;
         std::vector<std::string>* userList;
         std::vector<std::string>* serverList;
@@ -21,13 +41,6 @@ class LitModel
         double lambda_IAobj;
         double lambda_IApkt;
 
-
-    public:
-        LitModel();
-        ~LitModel();
-
-        void calc(NetworkTraffic& net);
-        bool save();
 };
 
 #endif // #ifndef __LIT_MODEL_H__

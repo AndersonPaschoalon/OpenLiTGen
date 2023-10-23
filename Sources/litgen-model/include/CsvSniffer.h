@@ -1,5 +1,5 @@
-#ifndef CSVSNIFFER_H
-#define CSVSNIFFER_H 1
+#ifndef __CSV_SNIFFER_H__
+#define __CSV_SNIFFER_H__ 1
 
 #include <fstream>      // For file input/output
 #include <sstream>      // For string stream operations
@@ -24,4 +24,4 @@ private:
     void populatePacketInfo(const std::string& line, double& firstArrival, PACKET_INFO* packetInfo);
 };
 
-#endif // CSVSNIFFER_H
+#endif // __CSV_SNIFFER_H__

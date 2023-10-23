@@ -126,11 +126,15 @@ bool LitModel::save()
         return false;  // Failed to open file
     }
 
-    printf("\nthis->lambda_Tis:%f\n", this->lambda_Tis);
-    printf("\nthis->lambda_Nobj:%f\n", this->lambda_Nobj);
-    printf("\nthis->lambda_Nsession:%f\n", this->lambda_Nsession);
-    printf("\nthis->lambda_IAobj:%f\n", this->lambda_IAobj);
-    printf("\nthis->lambda_IApkt:%f\n", this->lambda_IApkt);
+    printf("\nParameters:");
+    printf("\ntrafficName:%s", this->trafficName.c_str());
+    printf("\nComment:%s", this->comment.c_str());
+    printf("\nnUsers:%ld", this->nUsers);
+    printf("\nlambda_Nsession:%f", this->lambda_Nsession);
+    printf("\nlambda_Tis:%f", this->lambda_Tis);
+    printf("\nlambda_Nobj:%f", this->lambda_Nobj);
+    printf("\nlambda_IAobj:%f", this->lambda_IAobj);
+    printf("\nlambda_IApkt:%f\n", this->lambda_IApkt);
 
 
     // Write the private variables as key-value pairs
@@ -168,4 +172,111 @@ bool LitModel::save()
     file.close();
 
     return true;    
+}
+
+LitModel::LoadResult LitModel::load(const char *fileName)
+{
+    this->clear();
+
+    std::ifstream file(fileName);
+    if (!file.is_open())
+    {
+        return LoadResult::FILE_NOT_FOUND;
+    }
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        // Split the line into key and value
+        size_t delimiterPos = line.find('=');
+        if (delimiterPos == std::string::npos)
+        {
+            file.close();
+            clear();
+            printf("Wrong file format: No value was found for the key <%s>\n", line.c_str());
+            return LoadResult::WRONG_FORMAT;
+        }
+
+        std::string key = line.substr(0, delimiterPos);
+        std::string value = line.substr(delimiterPos + 1);
+
+        // Handle different keys
+        if (key == "nUsers")
+        {
+            this->nUsers = std::stol(value);
+        }
+        else if (key == "trafficName")
+        {
+            this->trafficName = value;
+        }
+        else if (key == "comment")
+        {
+            this->comment = value;
+        }
+        else if (key == "lambda_Nsession")
+        {
+            this->lambda_Nsession = std::stod(value);
+        }
+        else if (key == "lambda_Tis")
+        {
+            this->lambda_Tis = std::stod(value);
+        }
+        else if (key == "lambda_Nobj")
+        {
+            this->lambda_Nobj = std::stod(value);
+        }
+        else if (key == "lambda_IAobj")
+        {
+            this->lambda_IAobj = std::stod(value);
+        }
+        else if (key == "lambda_IApkt")
+        {
+            this->lambda_IApkt = std::stod(value);
+        }
+        else if (key == "userList")
+        {
+            this->userList = new std::vector<std::string>();
+            VectorUtils::toVec(value.c_str(), *(this->userList), ',');
+        }
+        else if (key == "serverList")
+        {
+            this->serverList = new std::vector<std::string>();
+            VectorUtils::toVec(value.c_str(), *(this->serverList), ',');
+        }
+    }
+
+    // Check if all required members have been loaded
+    if (this->nUsers == -1 || 
+        this->trafficName.empty() || 
+        this->comment.empty() ||
+        this->lambda_Nsession == -1 || 
+        this->lambda_Tis == -1 || 
+        this->lambda_Nobj == -1 ||
+        this->lambda_IAobj == -1 || 
+        this->lambda_IApkt == -1 || 
+        this->userList->empty() || 
+        this->serverList->empty())
+    {
+        file.close();
+        this->clear();
+        return LoadResult::WRONG_FORMAT;
+    }
+
+    file.close();
+    return LoadResult::OK;
+}
+
+void LitModel::clear()
+{
+    // Clear existing data
+    this->nUsers = -1;
+    this->userList->clear();
+    this->serverList->clear();
+    this->trafficName.clear();
+    this->comment.clear();
+    this->lambda_Nsession = -1;
+    this->lambda_Tis = -1;
+    this->lambda_Nobj = -1;
+    this->lambda_IAobj = -1;
+    this->lambda_IApkt = -1;    
 }

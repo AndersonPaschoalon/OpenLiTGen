@@ -7,7 +7,9 @@ TgEngine::TgEngine(const std::string& target) : target(target)
 
 TgEngine::~TgEngine() {}
 
-
+void TgEngine::samplePduQueue(LitModel &model, double timeout)
+{
+}
 
 PDU* TgEngine::consumePDU() 
 {

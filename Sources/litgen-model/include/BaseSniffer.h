@@ -1,5 +1,5 @@
-#ifndef BASESNIFFER_H
-#define BASESNIFFER_H 1
+#ifndef __BASESNIFFER_H__
+#define __BASESNIFFER_H__ 1
 
 #include <iostream>
 #include <algorithm>
@@ -46,4 +46,4 @@ protected:
     static void userAndFlowIdAssignment(std::vector<PACKET_INFO *> &pkts);
 };
 
-#endif // BASESNIFFER_H
+#endif // __BASESNIFFER_H__

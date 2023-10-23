@@ -7,6 +7,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "PDU.h"
+#include "LitModel.h"
 
 /**
  * @brief Abstract class representing a traffic generator engine.
@@ -28,7 +29,8 @@ public:
      */
     virtual ~TgEngine();
 
-    void configure(std::queue<PDU*>* ptrPacketQueue, double timeout);
+    void samplePduQueue(LitModel& model, double timeout);
+
     virtual void generate() = 0;
 
 

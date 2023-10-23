@@ -1,0 +1,10 @@
+nUsers=2
+trafficName=fakeTraffic2
+comment=CSV fake trafficls
+lambda_Nsession=0
+lambda_Tis=0
+lambda_Nobj=1
+lambda_IAobj=5
+lambda_IApkt=5
+userList=10.0.0.1:8080,10.0.0.2:5000
+serverList=192.168.1.101:5000
