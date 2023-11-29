@@ -1,6 +1,13 @@
 #ifndef __UTILS__H__
 #define __UTILS__H__ 1
 
+#include <iostream>
+#include <string>
+
+
+void splitString(const char* input, const char separator,  std::string& firstHalf, std::string& secondHalf);
+
+
 /*
 #include <iostream>
 #include <vector>

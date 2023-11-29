@@ -12,6 +12,8 @@
 #include <getopt.h>
 #include "LitModel.h"
 #include "TgEngine.h"
+#include "TgCsv.h"
+#include "TgTins.h"
 #include "Timer.h"
 
 #define LITGEN_TG_VERSION "1.0"
@@ -109,20 +111,20 @@ bool litgenTg(const char* strLitModel, unsigned int maxTimeSeconds, const char* 
 
     if (StringUtils::endsWith(strNetInterface, ".csv") == true)
     {
-        engine = TgCsv(strNetInterface);
+        engine = new TgCsv();
     }
     else
     {
-        engine = TgTins(strNetInterface);
+        engine = new TgTins();
     }
 
     printf("Modelling packets using litgen models %s...\n", strLitModel);
-    engine->samplePduQueue(*model, (double)maxTimeSeconds);
+    engine->createSamples(*model, (double)maxTimeSeconds);
     printf("Elapsed time: %s seconds.\n", timer.elapsedTime().c_str());
     printf("Done\n");
 
     printf("Starting traffic generation at %s...\n", strNetInterface);
-    engine->generate();
+    engine->generate(strNetInterface);
     printf("All Done!");
     printf("Elapsed time: %s seconds.\n", timer.elapsedTime().c_str());
 

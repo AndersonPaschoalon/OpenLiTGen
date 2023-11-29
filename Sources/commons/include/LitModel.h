@@ -25,10 +25,8 @@ class LitModel
         void calc(NetworkTraffic& net);
         bool save();
         LoadResult load(const char* fileName);
-
-    private:
-
-        void clear();
+        std::string getNextUser();
+        std::string getNextServer();
     
         long int nUsers;
         std::vector<std::string>* userList;
@@ -40,6 +38,12 @@ class LitModel
         double lambda_Nobj;
         double lambda_IAobj;
         double lambda_IApkt;
+
+    private:
+
+        int userCounter;
+        int serverCounter;
+        void clear();        
 
 };
 

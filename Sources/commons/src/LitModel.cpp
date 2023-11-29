@@ -14,6 +14,9 @@ LitModel::LitModel()
     this->trafficName = "";
     this->serverList = nullptr;
     this->userList = nullptr;
+    this->userCounter = 0;
+    this->serverCounter = 0;
+
 }
 
 LitModel::~LitModel()
@@ -264,6 +267,28 @@ LitModel::LoadResult LitModel::load(const char *fileName)
 
     file.close();
     return LoadResult::OK;
+}
+
+std::string LitModel::getNextUser()
+{
+    if (this->userList->empty()) 
+    {
+        return "";
+    }
+    std::string nextUser = this->userList->at(this->userCounter);
+    this->userCounter = (this->userCounter + 1) % this->userList->size();
+    return nextUser;
+}
+
+std::string LitModel::getNextServer()
+{
+    if (this->serverList->empty()) 
+    {
+        return "";
+    }
+    std::string nextServer = this->serverList->at(this->serverCounter);
+    this->serverCounter = (this->serverCounter + 1) % this->serverList->size();
+    return nextServer;
 }
 
 void LitModel::clear()

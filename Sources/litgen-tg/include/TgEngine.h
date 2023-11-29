@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include "ExponentialDistribution.h"
 #include "PDU.h"
 #include "LitModel.h"
 
@@ -22,27 +23,25 @@ public:
      * 
      * @param target The target for packet generation (e.g., file or network interface).
      */
-    TgEngine(const std::string& target);
-
+    TgEngine();
+ 
     /**
      * @brief Destructor for the TgEngine class.
      */
     virtual ~TgEngine();
 
-    void samplePduQueue(LitModel& model, double timeout);
+    void createSamples(LitModel& model, double timeout, unsigned int seed = 0);
 
-    virtual void generate() = 0;
+    virtual void generate(const char* target) = 0;
 
+
+    static bool comparePDUs(const PDU* pdu1, const PDU* pdu2);
 
 private:
-    std::string target;
-    std::queue<PDU*>* packetQueue;
-    double queueTimeout;
-    std::mutex packetQueueMutex;       // Mutex for packet queue access
-    std::condition_variable packetQueueCV; // Condition variable for packet queue synchronization
+    std::vector<PDU*>* packetVector;
 
 
-    PDU* TgEngine::consumePDU();
+    // PDU* TgEngine::consumePDU();
 };
 
 #endif // TG_ENGINE_H

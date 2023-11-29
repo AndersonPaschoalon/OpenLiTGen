@@ -6,23 +6,15 @@
 class StochasticDistribution 
 {
     public:
-        virtual ~StochasticDistribution() {}
-
+    
         // Fit the distribution to the provided samples
         virtual void fit(const std::vector<double>& samples) = 0;
 
-        // Generate nSamples samples following the distribution
-        virtual void gen(int nSamples, std::vector<double>& samples) = 0;
-
-        // Get the seed value for generating samples
-        virtual double getSeed() const;
-
-        // Set the seed value for generating samples
-        virtual void setSeed(double seed);
+        // Retuns a single sample.
+        virtual double nextSample() = 0;
 
     private: 
 
-        double seedVal;
 
 };
 

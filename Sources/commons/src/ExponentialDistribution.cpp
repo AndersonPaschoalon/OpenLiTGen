@@ -1,16 +1,34 @@
 #include "ExponentialDistribution.h"
-#include <random>
 
-ExponentialDistribution::ExponentialDistribution() : lambda(0.0)
+ExponentialDistribution::ExponentialDistribution()
 {
+    ExponentialDistribution(0);
+}
+
+ExponentialDistribution::ExponentialDistribution(unsigned int seed) : lambda(0.0)
+{
+    if (seed != 0)
+    {
+        std::seed_seq seq{int(seed), int(seed*seed), int(seed*seed*seed)};
+        this->gen = std::mt19937(seq);
+    }
+    else
+    {
+        std::random_device rd;
+        this->gen = std::mt19937(rd());
+    }
+
 }
 
 void ExponentialDistribution::fit(const std::vector<double> &samples)
 {
+    this->modelWasCreated = true;
+
     if (samples.empty()) 
     {
         // Handle the case when no samples are provided
         this->lambda = 0.0;
+        this->distribution = std::exponential_distribution<double>(this->lambda);
         return;
     }
 
@@ -21,6 +39,7 @@ void ExponentialDistribution::fit(const std::vector<double> &samples)
     }
 
     this->lambda = static_cast<double>(samples.size()) / sum;
+    this->distribution = std::exponential_distribution<double>(this->lambda);
 }
 
 double ExponentialDistribution::getLambda() const
@@ -28,16 +47,23 @@ double ExponentialDistribution::getLambda() const
     return this->lambda;
 }
 
-void ExponentialDistribution::gen(int nSamples, std::vector<double> &samples)
+void ExponentialDistribution::setLambda(double lambdaVal)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::exponential_distribution<double> distribution(this->lambda);
+    this->lambda = lambdaVal;
+    this->distribution = std::exponential_distribution<double>(this->lambda);
+    this->modelWasCreated = true;
 
-    samples.clear();
-    samples.reserve(nSamples);
-    for (int i = 0; i < nSamples; ++i) 
-    {
-        samples.push_back(distribution(gen));
-    }    
 }
+
+double ExponentialDistribution::nextSample()
+{
+    if(this->modelWasCreated == true)
+    {
+        return this->distribution(this->gen);
+    }
+
+    printf("ExponentialDistribution::fit() or  ExponentialDistribution::setLambda() must be called first.\n");
+    return 0.0;
+}
+
+

@@ -1,69 +1,131 @@
 #include "TgEngine.h"
+#include "cpptools.h"
 #include <chrono>
+#include <algorithm>
 
-TgEngine::TgEngine(const std::string& target) : target(target) 
+TgEngine::TgEngine()
 {
 }
 
-TgEngine::~TgEngine() {}
-
-void TgEngine::samplePduQueue(LitModel &model, double timeout)
+TgEngine::~TgEngine()
 {
+
 }
 
-PDU* TgEngine::consumePDU() 
+void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
 {
-    auto startTime = std::chrono::steady_clock::now();
-    PDU* pdu = nullptr;
-
-    while (!pdu) 
+    if(this->packetVector != nullptr)
     {
-        std::unique_lock<std::mutex> lock(packetQueueMutex);
+        delete this->packetVector;
+    }
 
-        if (!packetQueue->empty()) {
-            pdu = packetQueue->front();
-            packetQueue->pop();
-        } 
-        else 
+    this->packetVector = new std::vector<PDU*>();
+
+    // Instantiate Random variables
+
+    ExponentialDistribution Nsession(seed);
+    Nsession.setLambda(model.lambda_Nsession);
+
+    ExponentialDistribution Tis(seed);
+    Nsession.setLambda(model.lambda_Tis);    
+
+    ExponentialDistribution Nobj(seed);
+    Nsession.setLambda(model.lambda_Nobj);
+
+    ExponentialDistribution IAobj(seed);
+    Nsession.setLambda(model.lambda_IAobj);    
+
+    ExponentialDistribution IApkt(seed);
+    Nsession.setLambda(model.lambda_IApkt);
+
+    int nUsers = model.nUsers;
+
+    // create PDUs
+    double accTime = 0;
+    std::string userStr = "";
+    for(int i = 0; i < nUsers; i++)
+    {
+        userStr = model.getNextUser();
+        std::string ipStr;
+        std::string portStr;
+        splitString(userStr.c_str(), ':', ipStr, portStr);
+        int port = std::stoi(portStr);
+
+        // Session level. We assume each user undergoes an infinite succession of session
+        // and inter-session periods. During a session, a user makes use of the network
+        // resources by downloading a certain number of objects. We define two random
+        // variables to characterize this level: Nsession , the session size, i.e. the number of
+        // objects downloaded during a session and, Tis , the inter-session duration.
+        bool sessionEnd = false;
+        while (!sessionEnd)
         {
-            auto now = std::chrono::steady_clock::now();
-            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - startTime).count();
-            if (elapsed >= queueTimeout * 1000) {
-                break; // Timeout reached
+            // ceil for at least one packet
+            int  nSession = std::ceil(Nsession.nextSample()); 
+            // this will work as the time for the first packet as well
+            double interSessionTime = Tis.nextSample();
+            for(int j = 0; j < nSession; j++)
+            {
+                // Object level. A session is made of one or several objects. Indeed, a session is
+                // split up into a set of requests (sent by user) and responses (from the server),
+                // where responses gather the session’s objects. In the case of web, objects may be
+                // web pages’ main bodies (HTML skeletons) or embedded pictures [8]2 . In the case
+                // of mail, objects may be servers responses to clients requests (e.g. e-mails, clients
+                // accounts meta-data. . . ). In the case of P2P, objects may be files or chunks of
+                // files. The description of this level requires the definition of two random variables:
+                // Nobj , the object size, i.e. the number of IP packets in an object and, IAobj , the
+                // objects inter-arrival times in a session.  
+                accTime +=  interSessionTime;
+                int nPacketsInObject = std::ceil(Nobj.nextSample());
+                // this will be added after the last packet of the object is pushed        
+                double objectsInterArrival = IAobj.nextSample();
+                for(int k = 0; k < nPacketsInObject; k++)
+                {
+                    if(accTime > timeout)
+                    {
+                        sessionEnd = true;
+                        break;
+                    }
+                    // Packet level. Finally, each object is made of a set of packets. The arrival process
+                    // of packets in an object can be described by giving the successive inter-arrival
+                    // times between packets, characterized by random variables IApkt .
+                    PDU* pduPtr = new PDU();
+
+
+                    // pick a server
+                    std::string serverStr = model.getNextServer();
+                    std::string ipServerStr;
+                    std::string portServerStr;
+                    splitString(serverStr.c_str(), ':', ipServerStr, portServerStr);
+                    int portServer = std::stoi(portServerStr);
+
+                    // create PDU
+                    pduPtr->setArrivalTime(accTime);
+                    pduPtr->setIpSrc(ipStr);
+                    pduPtr->setPortSrc(port);                    
+                    pduPtr->setIpDst(ipServerStr);
+                    pduPtr->setPortDst(portServer);
+                    pduPtr->setPacketSize(1024); // TODO
+
+                    double interArrivals = IApkt.nextSample();
+                    accTime +=  interArrivals;
+
+                    this->packetVector->push_back(pduPtr);
+                }
+                // delay to the next object
+                accTime +=  objectsInterArrival;
+                if(sessionEnd)
+                {
+                    break;
+                }
             }
-            // Wait for a new PDU to be added to the queue or timeout
-            packetQueueCV.wait_for(lock, std::chrono::milliseconds(100));
         }
     }
 
-    return pdu;
+    // sort according to the arrival time
+    std::sort(this->packetVector->begin(), this->packetVector->end(), TgEngine::comparePDUs);
 }
 
-
-/**
- 
-
-void TgEngine::generate(std::queue<PDU*>* ptrPacketQueue, double timeout) {
-    while (true) {
-        // Check if the queue is empty
-        if (ptrPacketQueue->empty()) {
-            // Sleep for the specified timeout
-            std::this_thread::sleep_for(std::chrono::duration<double>(timeout));
-            if (ptrPacketQueue->empty()) {
-                // Queue is still empty, stop generating
-                break;
-            }
-        }
-
-        // Get the front packet from the queue
-        PDU* packet = ptrPacketQueue->front();
-        ptrPacketQueue->pop();
-
-        // Craft and send the packet to the target (implementation dependent)
-        // ...
-    }
+bool TgEngine::comparePDUs(const PDU *pdu1, const PDU *pdu2)
+{
+    return pdu1->getArrivalTime() < pdu2->getArrivalTime();
 }
-
-
- * **/
-
