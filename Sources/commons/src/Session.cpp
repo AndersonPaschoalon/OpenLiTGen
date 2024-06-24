@@ -63,12 +63,12 @@ const std::vector<Object> Session::getObjects() const
     return this->objects;
 }
 
-const int Session::nObjects() const
+int Session::nObjects() const
 {
     return this->objects.size();
 }
 
-const void Session::objectsInterArrivalTimes(std::vector<double>& interArrivalTimes) const
+void Session::objectsInterArrivalTimes(std::vector<double>& interArrivalTimes) const
 {
     interArrivalTimes.clear();
     interArrivalTimes.reserve(this->objects.size() - 1);
@@ -80,7 +80,7 @@ const void Session::objectsInterArrivalTimes(std::vector<double>& interArrivalTi
     }
 }
 
-const void Session::objectsNPackets(std::vector<int>& nPackets) const
+void Session::objectsNPackets(std::vector<int>& nPackets) const
 {
     nPackets.clear();
     nPackets.reserve(this->objects.size());
@@ -90,7 +90,7 @@ const void Session::objectsNPackets(std::vector<int>& nPackets) const
     }
 }
 
-const void Session::serverList(std::vector<std::string>& serverList) const
+void Session::serverList(std::vector<std::string>& serverList) const
 {
     serverList.clear();
     serverList.reserve(this->objects.size());
@@ -100,7 +100,7 @@ const void Session::serverList(std::vector<std::string>& serverList) const
     }
 }
 
-const double Session::getFirstArrival() const
+double Session::getFirstArrival() const
 {
     if (!this->objects.empty())
     {
@@ -109,7 +109,7 @@ const double Session::getFirstArrival() const
     return 0.0;
 }
 
-const void Session::toString(std::string& str) const
+void Session::toString(std::string& str) const
 {
     std::ostringstream oss;
     oss << ".   .   .   Session Size: " << nObjects() << " objects" << std::endl;

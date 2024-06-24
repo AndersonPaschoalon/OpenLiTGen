@@ -11,7 +11,7 @@ bool BaseSniffer::free(std::vector<PACKET_INFO *> &pkts)
 
 bool BaseSniffer::baseFree(std::vector<PACKET_INFO *> &pkts)
 {
-    for (int i = 0; i < pkts.size(); i++)
+    for (size_t i = 0; i < pkts.size(); i++)
     {
         delete pkts[i];
         pkts[i] = nullptr;

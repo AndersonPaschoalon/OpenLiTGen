@@ -1,11 +1,10 @@
 #include "ExponentialDistribution.h"
 
-ExponentialDistribution::ExponentialDistribution()
+ExponentialDistribution::ExponentialDistribution() : ExponentialDistribution(0) 
 {
-    ExponentialDistribution(0);
 }
 
-ExponentialDistribution::ExponentialDistribution(unsigned int seed) : lambda(0.0)
+ExponentialDistribution::ExponentialDistribution(unsigned int seed) : lambda(0.0), modelWasCreated(false)
 {
     if (seed != 0)
     {
@@ -62,7 +61,8 @@ double ExponentialDistribution::nextSample()
         return this->distribution(this->gen);
     }
 
-    printf("ExponentialDistribution::fit() or  ExponentialDistribution::setLambda() must be called first.\n");
+    std::fprintf(stderr, "Error: ExponentialDistribution::fit() or ExponentialDistribution::setLambda() must be called first.\n");
+    // printf("ExponentialDistribution::fit() or  ExponentialDistribution::setLambda() must be called first.\n");
     return 0.0;
 }
 

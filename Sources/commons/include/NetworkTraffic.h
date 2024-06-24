@@ -24,14 +24,14 @@ class NetworkTraffic
 
         void populateTraffic(const std::vector<PACKET_INFO*>& pkts, double sessionThreshold);
         const std::vector<User> getUsers() const;
-        const int nUsers() const;
+        int nUsers() const;
         const void toString(std::string& str) const;
         const std::string getName() const;
         const std::string getDescription() const;
-        const void queryUsersData(int& nUsers, std::vector<std::string>& userList, bool removeDuplicatesFromUserList) const;
-        const void querySessionsData(std::vector<double>& interSessionTimes, std::vector<int>& nObjectsPersection) const;
-        const void queryObjectData(std::vector<double>& interObjectTimes, std::vector<int>& npacketsPerObject, std::vector<std::string>& serverList, bool removeDuplicatesFromServerList) const;
-        const void queryPacketData(std::vector<double>& interPacketTimes, std::vector<short> packetSizes);
+        void queryUsersData(int& nUsers, std::vector<std::string>& userList, bool removeDuplicatesFromUserList) const;
+        void querySessionsData(std::vector<double>& interSessionTimes, std::vector<int>& nObjectsPersection) const;
+        void queryObjectData(std::vector<double>& interObjectTimes, std::vector<int>& npacketsPerObject, std::vector<std::string>& serverList, bool removeDuplicatesFromServerList) const;
+        void queryPacketData(std::vector<double>& interPacketTimes, std::vector<short> packetSizes);
 
 };
 

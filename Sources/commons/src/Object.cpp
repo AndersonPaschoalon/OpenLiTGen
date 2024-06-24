@@ -35,7 +35,7 @@ const std::vector<Packet> Object::getPackets() const
     return this->packets;
 }
 
-const double Object::getFirstArrivalTime() const
+double Object::getFirstArrivalTime() const
 {
     if(!packets.empty())
     {
@@ -44,7 +44,7 @@ const double Object::getFirstArrivalTime() const
     return 0.0;
 }
 
-const double Object::getLastArrivalTime() const
+double Object::getLastArrivalTime() const
 {
     if(!packets.empty())
     {
@@ -53,12 +53,12 @@ const double Object::getLastArrivalTime() const
     return 0.0;
 }
 
-const int Object::getNPackets() const
+int Object::getNPackets() const
 {
     return this->packets.size();
 }
 
-const int Object::dataSize() const
+int Object::dataSize() const
 {
     int total = 0;
     std::vector<short> pktSizes;
@@ -71,7 +71,7 @@ const int Object::dataSize() const
     return total;
 }
 
-const void Object::getArrivalTimes(std::vector<double>& arrivals) const
+void Object::getArrivalTimes(std::vector<double>& arrivals) const
 {
     arrivals.clear();
     arrivals.reserve(packets.size());
@@ -82,7 +82,7 @@ const void Object::getArrivalTimes(std::vector<double>& arrivals) const
     }
 }
 
-const void Object::getPktSizes(std::vector<short>& pktSizes) const
+void Object::getPktSizes(std::vector<short>& pktSizes) const
 {
     pktSizes.clear();
     pktSizes.reserve(packets.size());
@@ -93,7 +93,7 @@ const void Object::getPktSizes(std::vector<short>& pktSizes) const
     }
 }
 
-const void Object::getInterArrivalTimes(std::vector<double>& interArrivalTimes) const
+void Object::getInterArrivalTimes(std::vector<double>& interArrivalTimes) const
 {
     std::vector<double> arrivalTimes;
     this->getArrivalTimes(arrivalTimes);
@@ -108,7 +108,7 @@ const void Object::getInterArrivalTimes(std::vector<double>& interArrivalTimes) 
     }
 }
 
-const void Object::toString(std::string& str) const
+void Object::toString(std::string& str) const
 {
     std::ostringstream oss;
 

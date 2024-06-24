@@ -3,23 +3,34 @@
 #include <chrono>
 #include <algorithm>
 
-TgEngine::TgEngine()
+TgEngine::TgEngine() : packetVector(new std::vector<PDU*>()) 
 {
+
 }
+
 
 TgEngine::~TgEngine()
 {
+    for (PDU* pdu : *(this->packetVector)) {
+        delete pdu;
+    }
+    delete packetVector;    
 
 }
 
 void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
 {
-    if(this->packetVector != nullptr)
+    if (this->packetVector != nullptr) 
     {
-        delete this->packetVector;
-    }
+        for (PDU* pdu : *packetVector) 
+        {
+            delete pdu;
+        }
 
-    this->packetVector = new std::vector<PDU*>();
+        delete this->packetVector;
+        this->packetVector = new std::vector<PDU*>();
+    }
+    this->packetVector->reserve(model.nUsers * 100); // Assuming an average of 100 packets per user
 
     // Instantiate Random variables
 
@@ -27,16 +38,16 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
     Nsession.setLambda(model.lambda_Nsession);
 
     ExponentialDistribution Tis(seed);
-    Nsession.setLambda(model.lambda_Tis);    
+    Tis.setLambda(model.lambda_Tis);    
 
     ExponentialDistribution Nobj(seed);
-    Nsession.setLambda(model.lambda_Nobj);
+    Nobj.setLambda(model.lambda_Nobj);
 
     ExponentialDistribution IAobj(seed);
-    Nsession.setLambda(model.lambda_IAobj);    
+    IAobj.setLambda(model.lambda_IAobj);    
 
     ExponentialDistribution IApkt(seed);
-    Nsession.setLambda(model.lambda_IApkt);
+    IApkt.setLambda(model.lambda_IApkt);
 
     int nUsers = model.nUsers;
 
@@ -61,8 +72,8 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
         {
             // ceil for at least one packet
             int  nSession = std::ceil(Nsession.nextSample()); 
-            // this will work as the time for the first packet as well
-            double interSessionTime = Tis.nextSample();
+            // the first packet is send as the traffic starts
+            double interSessionTime = 0e-9;
             for(int j = 0; j < nSession; j++)
             {
                 // Object level. A session is made of one or several objects. Indeed, a session is
@@ -75,6 +86,7 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
                 // Nobj , the object size, i.e. the number of IP packets in an object and, IAobj , the
                 // objects inter-arrival times in a session.  
                 accTime +=  interSessionTime;
+                interSessionTime =  Tis.nextSample(); // time for the next packet to be sent
                 int nPacketsInObject = std::ceil(Nobj.nextSample());
                 // this will be added after the last packet of the object is pushed        
                 double objectsInterArrival = IAobj.nextSample();

@@ -49,7 +49,7 @@ const std::vector<Session> User::getSessions() const
     return this->sessions;
 }
 
-const void User::getInterSessionTimes(std::vector<double>& interSessionTimes) const
+void User::getInterSessionTimes(std::vector<double>& interSessionTimes) const
 {
     interSessionTimes.clear();
     for (size_t i = 1; i < this->sessions.size(); ++i)
@@ -59,7 +59,7 @@ const void User::getInterSessionTimes(std::vector<double>& interSessionTimes) co
     }
 }
 
-const void User::getNObjectsPerSession(std::vector<int> &nObjectsPerSession) const
+void User::getNObjectsPerSession(std::vector<int> &nObjectsPerSession) const
 {
     nObjectsPerSession.clear();
     for (size_t i = 1; i < this->sessions.size(); ++i)
@@ -68,7 +68,7 @@ const void User::getNObjectsPerSession(std::vector<int> &nObjectsPerSession) con
     }
 }
 
-const void User::toString(std::string &str) const
+void User::toString(std::string &str) const
 {
     std::ostringstream oss;
 

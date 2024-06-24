@@ -2,6 +2,8 @@
 #define __TG_TINS__H__ 1
 
 #include "TgEngine.h"
+#include <iostream>
+#include <tins/tins.h>
 
 
 class TgTins: public TgEngine
@@ -19,6 +21,9 @@ class TgTins: public TgEngine
 
 
     private:
+
+        Tins::NetworkInterface iface;
+        Tins::PacketSender sender;
 
 };
 

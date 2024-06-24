@@ -1,8 +1,8 @@
 nUsers=2
 trafficName=fakeTraffic2
 comment=CSV fake traffic -- debug with vscode!!
-lambda_Nsession=0
-lambda_Tis=0
+lambda_Nsession=0.1
+lambda_Tis=0.1
 lambda_Nobj=1
 lambda_IAobj=5
 lambda_IApkt=5

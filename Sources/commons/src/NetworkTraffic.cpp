@@ -31,7 +31,7 @@ const std::vector<User> NetworkTraffic::getUsers() const
     return users;
 }
 
-const int NetworkTraffic::nUsers() const
+int NetworkTraffic::nUsers() const
 {
     return this->users.size();
 }
@@ -65,7 +65,7 @@ const std::string NetworkTraffic::getDescription() const
     return this->trafficDescription;
 }
 
-const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> &userList, bool removeDuplicatesFromUserList) const
+void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> &userList, bool removeDuplicatesFromUserList) const
 {
     nUsers = this->nUsers();
     userList.clear();
@@ -76,7 +76,7 @@ const void NetworkTraffic::queryUsersData(int& nUsers, std::vector<std::string> 
     userList = VectorUtils::removeDuplicates(userList);
 }
 
-const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTimes, std::vector<int> &nObjectsPerSection) const
+void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTimes, std::vector<int> &nObjectsPerSection) const
 {
     interSessionTimes.clear();
     nObjectsPerSection.clear();
@@ -93,7 +93,7 @@ const void NetworkTraffic::querySessionsData(std::vector<double> &interSessionTi
     }
 }
 
-const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes, std::vector<int> &npacketsPerObject, std::vector<std::string> &serverList, bool removeDuplicatesFromServerList) const
+void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes, std::vector<int> &npacketsPerObject, std::vector<std::string> &serverList, bool removeDuplicatesFromServerList) const
 {
     interObjectTimes.clear();
     npacketsPerObject.clear();
@@ -120,7 +120,7 @@ const void NetworkTraffic::queryObjectData(std::vector<double> &interObjectTimes
     serverList =  VectorUtils::removeDuplicates(serverList);
 }
 
-const void NetworkTraffic::queryPacketData(std::vector<double> &interPacketTimes, std::vector<short> packetSizes)
+void NetworkTraffic::queryPacketData(std::vector<double> &interPacketTimes, std::vector<short> packetSizes)
 {
     interPacketTimes.clear();
     packetSizes.clear();

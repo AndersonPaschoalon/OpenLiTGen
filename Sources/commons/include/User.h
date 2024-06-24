@@ -18,9 +18,9 @@ class User
         void populateUsers(const std::vector<PACKET_INFO *> &pkts, double sessionThreshold);
         const std::string getUser() const;
         const std::vector<Session> getSessions() const;
-        const void getInterSessionTimes(std::vector<double>& interSessionTimes) const;
-        const void getNObjectsPerSession(std::vector<int>& nObjectsPerSession) const;
-        const void toString(std::string& str) const;
+        void getInterSessionTimes(std::vector<double>& interSessionTimes) const;
+        void getNObjectsPerSession(std::vector<int>& nObjectsPerSession) const;
+        void toString(std::string& str) const;
 };
 
 #endif // __USER_H__

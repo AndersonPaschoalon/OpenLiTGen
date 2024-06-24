@@ -12,8 +12,8 @@ LitModel::LitModel()
     this->nUsers = 0;
     this->comment = "";
     this->trafficName = "";
-    this->serverList = nullptr;
-    this->userList = nullptr;
+    this->serverList = new std::vector<std::string>();
+    this->userList = new std::vector<std::string>();
     this->userCounter = 0;
     this->serverCounter = 0;
 
@@ -21,16 +21,16 @@ LitModel::LitModel()
 
 LitModel::~LitModel()
 {
-    if (this->serverList != nullptr)
-    {
+    //if (this->serverList != nullptr)
+    //{
         delete this->serverList;
         this->serverList = nullptr;
-    }
-    if (this->userList != nullptr)
-    {
+    //}
+    //if (this->userList != nullptr)
+    //{
         delete this->userList;
         this->userList = nullptr;
-    }
+    //}
 }
 
 void LitModel::calc(NetworkTraffic &net)

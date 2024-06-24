@@ -17,31 +17,50 @@
  * the `generate` method to craft and send packets to the specified target.
  */
 class TgEngine {
-public:
-    /**
-     * @brief Constructor for the TgEngine class.
-     * 
-     * @param target The target for packet generation (e.g., file or network interface).
-     */
-    TgEngine();
- 
-    /**
-     * @brief Destructor for the TgEngine class.
-     */
-    virtual ~TgEngine();
+    public:
 
-    void createSamples(LitModel& model, double timeout, unsigned int seed = 0);
+        /**
+         * @brief Constructor for the TgEngine class.
+         * 
+         * @param target The target for packet generation (e.g., file or network interface).
+         */
+        TgEngine();
+    
+        /**
+         * @brief Destructor for the TgEngine class.
+         */
+        virtual ~TgEngine();
 
-    virtual void generate(const char* target) = 0;
+        /**
+         * @brief Creates samples based on the given LitModel.
+         * 
+         * @param model The LitModel used to generate traffic samples.
+         * @param timeout The maximum time to generate samples.
+         * @param seed Optional seed for random number generation.
+         */
+        void createSamples(LitModel& model, double timeout, unsigned int seed = 0);
 
+        /**
+         * @brief Pure virtual method to generate traffic.
+         * 
+         * Subclasses must implement this method to generate traffic to the specified target.
+         * 
+         * @param target The target for packet generation (e.g., file or network interface).
+         */
+        virtual void generate(const char* target) = 0;
 
-    static bool comparePDUs(const PDU* pdu1, const PDU* pdu2);
+        /**
+         * @brief Comparator function for sorting PDUs.
+         * 
+         * @param pdu1 First PDU to compare.
+         * @param pdu2 Second PDU to compare.
+         * @return True if pdu1 arrival timer is smaller than than pdu2 (came before), false otherwise.
+         */
+        static bool comparePDUs(const PDU* pdu1, const PDU* pdu2);
 
-private:
-    std::vector<PDU*>* packetVector;
+    protected:
+        std::vector<PDU*>* packetVector;
 
-
-    // PDU* TgEngine::consumePDU();
 };
 
 #endif // TG_ENGINE_H

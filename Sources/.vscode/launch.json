@@ -5,12 +5,10 @@
         "name": "debug_litgen_model",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/bin/litgen-model.exe",
+        "program": "${workspaceFolder}/bin/litgen-model.dbg.exe",
         "args": [
-          "--pcap",
-          "../../Pcaps/fakeTraffic2.csv",
-          "--comment",
-          "CSV fake traffic -- debug with vscode!!"
+          "--pcap",    "../../Pcaps/fakeTraffic2.csv",
+          "--comment", "CSV fake traffic -- debug with vscode!!"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
@@ -30,8 +28,12 @@
         "name": "debug_litgen_tg",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/bin/litgen-tg.exe",
-        "args": [],
+        "program": "${workspaceFolder}/bin/litgen-tg.dbg.exe",
+        "args": [
+          "--max-time", "100",
+          "--model", "fakeTraffic2.lit",
+          "--interface", "console"
+        ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],
