@@ -1,6 +1,7 @@
 #include "TgEngine.h"
 #include "cpptools.h"
 #include <chrono>
+#include <math.h> 
 #include <algorithm>
 
 TgEngine::TgEngine() : packetVector(new std::vector<PDU*>()) 
@@ -34,28 +35,35 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
 
     // Instantiate Random variables
 
+    // Nsession: The number of objects sent during a session period
     ExponentialDistribution Nsession(seed);
     Nsession.setLambda(model.lambda_Nsession);
 
-    ExponentialDistribution Tis(seed);
+    // Tis: The duration of the inter-session period.
+    ExponentialDistribution Tis(seed + 1); // Different seed to avoid correlation
     Tis.setLambda(model.lambda_Tis);    
 
-    ExponentialDistribution Nobj(seed);
+    // Nobj: The number of IP packets that compose the object.
+    ExponentialDistribution Nobj(seed  + 2);
     Nobj.setLambda(model.lambda_Nobj);
 
-    ExponentialDistribution IAobj(seed);
+    // IAobj: The inter-arrival times among each object in a session.
+    ExponentialDistribution IAobj(seed + 3);
     IAobj.setLambda(model.lambda_IAobj);    
 
-    ExponentialDistribution IApkt(seed);
+    // IApkt: The inter-arrival times between packets within an object.
+    ExponentialDistribution IApkt(seed + 4);
     IApkt.setLambda(model.lambda_IApkt);
 
     int nUsers = model.nUsers;
 
     // create PDUs
+    // acumulated time for each user
     double accTime = 0;
     std::string userStr = "";
     for(int i = 0; i < nUsers; i++)
     {
+        accTime = 0; // reset counter
         userStr = model.getNextUser();
         std::string ipStr;
         std::string portStr;
@@ -72,8 +80,7 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
         {
             // ceil for at least one packet
             int  nSession = std::ceil(Nsession.nextSample()); 
-            // the first packet is send as the traffic starts
-            double interSessionTime = 0e-9;
+            // pack all the objects of this session
             for(int j = 0; j < nSession; j++)
             {
                 // Object level. A session is made of one or several objects. Indeed, a session is
@@ -84,12 +91,10 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
                 // accounts meta-data. . . ). In the case of P2P, objects may be files or chunks of
                 // files. The description of this level requires the definition of two random variables:
                 // Nobj , the object size, i.e. the number of IP packets in an object and, IAobj , the
-                // objects inter-arrival times in a session.  
-                accTime +=  interSessionTime;
-                interSessionTime =  Tis.nextSample(); // time for the next packet to be sent
+                // objects inter-arrival times in a session. 
+
                 int nPacketsInObject = std::ceil(Nobj.nextSample());
-                // this will be added after the last packet of the object is pushed        
-                double objectsInterArrival = IAobj.nextSample();
+                // ship all the packet of the current object
                 for(int k = 0; k < nPacketsInObject; k++)
                 {
                     if(accTime > timeout)
@@ -101,7 +106,6 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
                     // of packets in an object can be described by giving the successive inter-arrival
                     // times between packets, characterized by random variables IApkt .
                     PDU* pduPtr = new PDU();
-
 
                     // pick a server
                     std::string serverStr = model.getNextServer();
@@ -118,22 +122,34 @@ void TgEngine::createSamples(LitModel &model, double timeout, unsigned int seed)
                     pduPtr->setPortDst(portServer);
                     pduPtr->setPacketSize(1024); // TODO
 
-                    double interArrivals = IApkt.nextSample();
-                    accTime +=  interArrivals;
-
+                    // packet ready to ship
                     this->packetVector->push_back(pduPtr);
+                    
+                    // inter packet time - do not add for the last packet
+                    if(k < nPacketsInObject - 1)
+                    {
+                        double interArrivals = IApkt.nextSample();
+                        accTime +=  interArrivals;
+                    }
+
                 }
-                // delay to the next object
-                accTime +=  objectsInterArrival;
                 if(sessionEnd)
                 {
                     break;
                 }
+                // delay to the next object -- do not add if it is the last
+                if (j <  nSession - 1)
+                {
+                    accTime +=  IAobj.nextSample();
+                }
             }
+            // add delay to the next session -- there is no fixed number of sessions, always add.
+            accTime += Tis.nextSample();
         }
     }
 
     // sort according to the arrival time
+    // so the packets are going to be organized according arrival time.
     std::sort(this->packetVector->begin(), this->packetVector->end(), TgEngine::comparePDUs);
 }
 
