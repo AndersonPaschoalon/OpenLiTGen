@@ -1,3 +1,7 @@
+# Include 
+!Sources/libs/cpptools_0.1.0.0/bin/libcpptools.a
+!Sources/libs/cpptools_0.1.0.0/bin/libcpptools.so
+
 # Prerequisites
 *.d
 
