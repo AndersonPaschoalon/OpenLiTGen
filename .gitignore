@@ -31,6 +31,10 @@
 *.out
 *.app
 
+# Cmake
+Sources/litgen-tg/build/*
+Sources/litgen-model/build/*
+
 # Include 
 !Sources/libs/cpptools_0.1.0.0/bin/libcpptools.a
 !Sources/libs/cpptools_0.1.0.0/bin/libcpptools.so

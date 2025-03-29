@@ -5,6 +5,15 @@ project(litgen-tg)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Find Tins library using pkg-config
+find_package(PkgConfig REQUIRED)
+# Find libtins library using pkg-config
+pkg_check_modules(TINS REQUIRED libtins)
+# Find libpcap library using pkg-config
+pkg_check_modules(PCAP REQUIRED libpcap)
+# Find pthread (Threads) library
+find_package(Threads REQUIRED)
+
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/../commons/include)

@@ -9,7 +9,13 @@ Before building the project, ensure you have the following installed:
 - **Tins** library
 - **libpcap** library
 - **pthread** library
-- **cpptools** (internal utility library)
+
+Run the following command to install the required dependencies:
+```bash
+sudo apt update
+sudo apt install -y libpcap-dev libtins-dev pkg-config build-essential
+```
+
 
 ## Building the Project
 
